@@ -1,0 +1,12 @@
+Zurück zu dir – Krafttier-Orakel Light (Version 3)
+
+Upload: Den Ordner krafttier mit index.html und karten/ in das öffentliche GitHub-Repository kompass hochladen.
+
+Änderungen:
+- Leitfrage auf eigener Zeile.
+- Vorbereiteter Link zur geschützten Krafttier-Deutung.
+- Originalrückseite zusätzlich als hochauflösende PNG-Datei beigelegt.
+
+WICHTIG: Die Saat des Lebens ist noch NICHT in das Originalbild der Rückseite eingebettet. Die Rückseite ist im aktuellen Einzelzug-Orakel noch nicht sichtbar; das ist eine spätere optische Ergänzung.
+
+Die Zielseite im Beratungsbereich muss später noch angelegt und über Cloudflare veröffentlicht werden.
