@@ -7,6 +7,7 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#eee0cb,#faf6ef 48%,#f4ecdf);color:#493b32;font:18px/1.65 Georgia,serif;min-height:100vh}main{width:min(100% - 32px,760px);margin:auto;padding:48px 0 52px}header,footer,.actions,.intro,.section{text-align:center}.brand,.section{color:#795b34;text-transform:uppercase;letter-spacing:.19em;font-size:.77rem}.ornament{font-size:25px;color:#94703e}h1,h2,h3{font-weight:normal;line-height:1.2}h1{font-size:clamp(2.3rem,7vw,3.8rem);margin:.3em 0 .7em}h2{font-size:clamp(1.6rem,4vw,2.25rem)}h3{font-size:1.45rem}.card{background:#fffcf6;border:1px solid #decbb0;border-radius:24px;padding:clamp(18px,5vw,44px);box-shadow:0 14px 42px #6e523710}.actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:25px}button{font:inherit;cursor:pointer}button.primary,button.secondary{border-radius:30px;padding:10px 22px;border:1px solid #795b65}.primary{background:#47354c;color:#fffaf1}.secondary{background:transparent;color:#47354c}button:disabled{opacity:.55;cursor:default}button:focus-visible,input:focus-visible+span,a:focus-visible{outline:3px solid #8a622f;outline-offset:3px}progress,meter{width:100%;accent-color:#88673e}progress{height:12px}fieldset{border:0;margin:0;padding:0;min-width:0}legend{padding:0;width:100%;text-align:center;font-size:clamp(1.25rem,4vw,1.8rem);line-height:1.35;margin:19px 0}label{display:block;position:relative;margin:9px 0}label input{position:absolute;left:15px;top:19px;accent-color:#47354c}label span{display:block;padding:12px 14px 12px 43px;border:1px solid #decbb0;border-radius:12px;cursor:pointer}label input:checked+span{background:#efe5ed;border-color:#795b65}label:hover span{border-color:#795b65}.muted,footer{font-size:.92rem;color:#68594f}footer{margin:24px 0}a{color:#60472c}.profile+ .profile{border-top:1px solid #decbb0;margin-top:28px;padding-top:12px}.meter-row{display:grid;grid-template-columns:55px 1fr 48px;align-items:center;gap:10px;font-size:.95rem}.meter-row span:last-child{text-align:right}[hidden]{display:none!important}
 @media print{body,.card{background:#fff;box-shadow:none}main{width:100%;padding:0}.actions,footer{display:none}.profile{break-inside:avoid}}
+.dosha-result{font-size:clamp(1.55rem,5vw,2.35rem);line-height:1.2;color:#795b34;text-align:center;margin:.5em 0}.profile h4{font-size:1.1rem;color:#795b34;margin-bottom:.3em}.profile h4+p{margin-top:0}
 </style>
 <main>
 <header><div class="brand">Zurück zu dir</div><div class="ornament" aria-hidden="true">✦</div><h1>Dein Ayurveda-Test</h1></header>
@@ -44,6 +45,11 @@ const combinations = {
  "02":"Du kannst Neues entdecken und Vertrautem Tiefe geben. Vielleicht kommen dir die besten Ideen in einem ruhigen Rahmen, in dem du etwas in deinem eigenen Tempo wachsen lassen kannst.",
  "12":"Du kannst eine Entscheidung treffen und ihr zugleich Zeit geben. Das ist eine Stärke, wenn ein Vorhaben eine klare Richtung und über längere Zeit verlässliche Begleitung braucht."
 };
+const energetic = [
+ ["Vata ist die Energie der Bewegung. Vielleicht kennst du das: Eine Begegnung, ein Satz, und in dir gehen gleich mehrere Türen auf. Du nimmst Zwischentöne wahr und kannst aus kleinen Impulsen etwas Eigenes entstehen lassen. Diese Beweglichkeit ist eine Kraft. Sie kann sich aber auch zerstreut anfühlen, wenn alles gleichzeitig deine Aufmerksamkeit will.","Wenn du voller Ideen nach Hause kommst, schreib sie alle kurz auf. Dann such dir die eine aus, die du morgen wirklich weitertragen möchtest. So bekommt deine Leichtigkeit etwas, woran sie sich festhalten kann."],
+ ["Pitta ist die Energie des Feuers und der Veränderung. Vielleicht spürst du schnell: Da will ich hin. Du kannst Klarheit in eine Situation bringen und mit deiner Begeisterung etwas in Bewegung setzen. Wenn dir etwas am Herzen liegt, gibst du viel hinein. Gerade dann darfst du merken, wann dein Feuer dich wärmt und wann du anfängst, dich selbst anzutreiben.","Wenn du ein Vorhaben schon zum dritten Mal überarbeitest, leg für heute einen guten Schlusspunkt fest. Manchmal bringt ein bisschen Abstand genau die Klarheit zurück, die du mit noch mehr Anstrengung gesucht hast."],
+ ["Kapha ist die Energie von Erde und Wasser. Du gibst Dingen Zeit, Wurzeln zu schlagen. Menschen können bei dir ankommen, und was dir wichtig ist, trägst du oft auch dann noch, wenn die erste Begeisterung längst vorbei ist. Diese Beständigkeit kann viel Halt geben. Manchmal hält sie dich auch ein bisschen länger beim Vertrauten, obwohl dich längst etwas Neues ruft.","Wenn du schon lange etwas anders machen möchtest, fang klein an. Verabrede dich für einen einzigen Spaziergang oder nimm dir zehn Minuten für eine Idee. Oft kommt die Lust auf mehr erst, wenn du schon unterwegs bist."]
+];
 const split = 14;
 function summarize(values, minimum) {
  const counts = [0,0,0];
@@ -103,8 +109,27 @@ function profile(current) {
    make("p","Für diesen Teil hast du zu wenige passende Antworten gewählt, um eine Tendenz anzuzeigen.",section);
    return;
  }
- const names = leaders.map(i => types[i].name).join(" · ");
- make("p",leaders.length===3 ? "Deine Antworten verteilen sich auf Vata, Pitta und Kapha." : leaders.length===2 ? "Bei dir liegen "+names+" nah beieinander." : names+" ist in deinen Antworten am deutlichsten vertreten.",section);
+ const strongest = leaders.filter(i => counts[i] === counts[leaders[0]]);
+ const names = leaders.map(i => types[i].name).join('–');
+ const leadName = types[strongest[0]].name;
+ const isTie = strongest.length > 1;
+ const headline = leaders.length === 3 ? 'Vata · Pitta · Kapha' : names;
+ make('p', headline, section).className = 'dosha-result';
+ const explanation = leaders.length === 1
+   ? leadName + ' ist in deinen Antworten am stärksten.'
+   : isTie
+     ? new Intl.ListFormat('de-CH').format(strongest.map(i => types[i].name)) + ' liegen bei dir gleichauf.' +
+       (leaders.length > strongest.length ? ' ' + types[leaders[2]].name + ' folgt knapp dahinter.' : '')
+     : leadName + ' ist am stärksten vertreten. ' + leaders.slice(1).map(i => types[i].name).join(' und ') + (leaders.length === 2 ? ' liegt' : ' liegen') + ' knapp dahinter.';
+ make('p', explanation, section);
+ if (leaders.length === 3) make('p', 'Alle drei Qualitäten sind in deinen Antworten nah beieinander. Vielleicht kennst du die Momente, in denen du vor Ideen sprühst, genauso gut wie die, in denen du entschieden vorangehst oder anderen Ruhe gibst. Welche Kraft du gerade brauchst, darf sich von Situation zu Situation ändern.', section);
+ if (leaders.length === 2) make('p', combinations[[...leaders].sort().join('')], section);
+ for (const i of leaders) {
+   const type = types[i];
+   make('h4', type.name + ' · ' + type.element, section);
+   make('p', current ? type.current : energetic[i][0], section);
+   if (current || leaders.length < 3) make('p', current ? type.example : energetic[i][1], section);
+ }
  for (const [i,type] of types.entries()) {
    const row = make("div","",section);
    row.className = "meter-row";
@@ -116,12 +141,6 @@ function profile(current) {
    make("span",counts[i]+"/"+total,row);
  }
  make("p","Die Balken zeigen, wie viele deiner beantworteten Fragen zu jedem Dosha beigetragen haben.",section).className = "muted";
- for (const i of leaders) {
-   const type = types[i];
-   make("p",type.name+" steht hier für "+type.element+". "+(current ? type.current : type.strength),section);
-   if (current) make("p",type.example,section);
- }
- if (!current && leaders.length === 2) make("p",combinations[[...leaders].sort().join("")],section);
 }
 get("start").onclick = render;
 get("back").onclick = () => {if (index > 0) {index--; render();}};
