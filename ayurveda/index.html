@@ -26,7 +26,7 @@
 <section class="card" id="result" hidden>
 <h2 tabindex="-1" id="result-heading">Deine Ayurveda-Auswertung</h2>
 <div id="profiles"></div>
-<p>Vielleicht erkennst du in beiden Teilen dieselbe Tendenz. Vielleicht ist etwas gerade besonders präsent, das du sonst kaum bemerkst. Lass beides nebeneinander stehen. Ein einzelner Test muss dich nicht ganz beschreiben.</p>
+
 <div class="actions"><button class="secondary" id="edit">Antworten ansehen</button><button class="secondary" id="restart">Neu starten</button><button class="primary" id="print">Auswertung drucken</button></div>
 </section>
 <footer>Der Test ist eine persönliche Orientierung nach ayurvedischen Konzepten. Er stellt keine Diagnose. Deine Antworten bleiben auf dieser Seite.<br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3803118/">Forschung zur Einschätzung ayurvedischer Konstitution</a></footer>
@@ -104,7 +104,7 @@ function profile(current) {
  const {counts,total,leaders} = summarize(current ? values.slice(split) : values.slice(0,split),current ? 4 : 7);
  const section = make("section","",get("profiles"));
  section.className = "profile";
- make("h3",current ? "Was gerade stärker spürbar ist" : "Was dich über längere Zeit prägt",section);
+ make("h3",current ? "Deine Momentaufnahme der letzten zwei Wochen" : "Dein Ayurveda-Typ",section);
  if (!leaders.length) {
    make("p","Für diesen Teil hast du zu wenige passende Antworten gewählt, um eine Tendenz anzuzeigen.",section);
    return;
@@ -113,7 +113,8 @@ function profile(current) {
  const names = leaders.map(i => types[i].name).join('–');
  const leadName = types[strongest[0]].name;
  const isTie = strongest.length > 1;
- const headline = leaders.length === 3 ? 'Vata · Pitta · Kapha' : names;
+ const typeName = leaders.length === 3 ? 'Vata–Pitta–Kapha' : names;
+ const headline = current ? 'Aktuell: ' + typeName : 'Du bist ein ' + typeName + '-Typ';
  make('p', headline, section).className = 'dosha-result';
  const explanation = leaders.length === 1
    ? leadName + ' ist in deinen Antworten am stärksten.'
@@ -121,7 +122,7 @@ function profile(current) {
      ? new Intl.ListFormat('de-CH').format(strongest.map(i => types[i].name)) + ' liegen bei dir gleichauf.' +
        (leaders.length > strongest.length ? ' ' + types[leaders[2]].name + ' folgt knapp dahinter.' : '')
      : leadName + ' ist am stärksten vertreten. ' + leaders.slice(1).map(i => types[i].name).join(' und ') + (leaders.length === 2 ? ' liegt' : ' liegen') + ' knapp dahinter.';
- make('p', explanation, section);
+ make('p', current ? explanation + ' Das beschreibt deine letzten zwei Wochen.' : explanation + ' Dieses Ergebnis kannst du bei LP Next übernehmen.', section);
  if (leaders.length === 3) make('p', 'Alle drei Qualitäten sind in deinen Antworten nah beieinander. Vielleicht kennst du die Momente, in denen du vor Ideen sprühst, genauso gut wie die, in denen du entschieden vorangehst oder anderen Ruhe gibst. Welche Kraft du gerade brauchst, darf sich von Situation zu Situation ändern.', section);
  if (leaders.length === 2) make('p', combinations[[...leaders].sort().join('')], section);
  for (const i of leaders) {
