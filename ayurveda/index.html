@@ -122,7 +122,7 @@ function profile(current) {
      ? new Intl.ListFormat('de-CH').format(strongest.map(i => types[i].name)) + ' liegen bei dir gleichauf.' +
        (leaders.length > strongest.length ? ' ' + types[leaders[2]].name + ' folgt knapp dahinter.' : '')
      : leadName + ' ist am stärksten vertreten. ' + leaders.slice(1).map(i => types[i].name).join(' und ') + (leaders.length === 2 ? ' liegt' : ' liegen') + ' knapp dahinter.';
- make('p', current ? explanation + ' Das beschreibt deine letzten zwei Wochen.' : explanation + ' Dieses Ergebnis kannst du bei LP Next übernehmen.', section);
+ make('p', current ? explanation + ' Das beschreibt deine letzten zwei Wochen.' : explanation + ' Das ist deine Ayurveda-Grundtendenz.', section);
  if (leaders.length === 3) make('p', 'Alle drei Qualitäten sind in deinen Antworten nah beieinander. Vielleicht kennst du die Momente, in denen du vor Ideen sprühst, genauso gut wie die, in denen du entschieden vorangehst oder anderen Ruhe gibst. Welche Kraft du gerade brauchst, darf sich von Situation zu Situation ändern.', section);
  if (leaders.length === 2) make('p', combinations[[...leaders].sort().join('')], section);
  for (const i of leaders) {
