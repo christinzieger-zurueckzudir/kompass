@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="de-CH">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Entdecke deine Vata-, Pitta- und Kapha-Tendenzen mit dem kostenlosen Ayurveda-Test von Zurück zu dir.">
+<title>Dein Ayurveda-Test · Zurück zu dir</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#eee0cb,#faf6ef 48%,#f4ecdf);color:#493b32;font:18px/1.65 Georgia,serif;min-height:100vh}main{width:min(100% - 32px,760px);margin:auto;padding:48px 0 52px}header,footer,.actions,.intro,.section{text-align:center}.brand,.section{color:#795b34;text-transform:uppercase;letter-spacing:.19em;font-size:.77rem}.ornament{font-size:25px;color:#94703e}h1,h2,h3{font-weight:normal;line-height:1.2}h1{font-size:clamp(2.3rem,7vw,3.8rem);margin:.3em 0 .7em}h2{font-size:clamp(1.6rem,4vw,2.25rem)}h3{font-size:1.45rem}.card{background:#fffcf6;border:1px solid #decbb0;border-radius:24px;padding:clamp(18px,5vw,44px);box-shadow:0 14px 42px #6e523710}.actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:25px}button{font:inherit;cursor:pointer}button.primary,button.secondary{border-radius:30px;padding:10px 22px;border:1px solid #795b65}.primary{background:#47354c;color:#fffaf1}.secondary{background:transparent;color:#47354c}button:disabled{opacity:.55;cursor:default}button:focus-visible,input:focus-visible+span,a:focus-visible{outline:3px solid #8a622f;outline-offset:3px}progress,meter{width:100%;accent-color:#88673e}progress{height:12px}fieldset{border:0;margin:0;padding:0;min-width:0}legend{padding:0;width:100%;text-align:center;font-size:clamp(1.25rem,4vw,1.8rem);line-height:1.35;margin:19px 0}label{display:block;position:relative;margin:9px 0}label input{position:absolute;left:15px;top:19px;accent-color:#47354c}label span{display:block;padding:12px 14px 12px 43px;border:1px solid #decbb0;border-radius:12px;cursor:pointer}label input:checked+span{background:#efe5ed;border-color:#795b65}label:hover span{border-color:#795b65}.muted,footer{font-size:.92rem;color:#68594f}footer{margin:24px 0}a{color:#60472c}.profile+ .profile{border-top:1px solid #decbb0;margin-top:28px;padding-top:12px}.meter-row{display:grid;grid-template-columns:55px 1fr 48px;align-items:center;gap:10px;font-size:.95rem}.meter-row span:last-child{text-align:right}[hidden]{display:none!important}
+@media print{body,.card{background:#fff;box-shadow:none}main{width:100%;padding:0}.actions,footer{display:none}.profile{break-inside:avoid}}
+</style>
+<main>
+<header><div class="brand">Zurück zu dir</div><div class="ornament" aria-hidden="true">✦</div><h1>Dein Ayurveda-Test</h1></header>
+<section class="card intro" id="intro">
+<h2>Was ist dir vertraut? Was ist gerade laut?</h2>
+<p>Manchmal fühlt sich das, was uns gerade viel Kraft kostet, an, als wären wir schon immer so gewesen. Dieser Test lädt dich ein, genauer hinzuschauen. Wie bist du, wenn du dich wohlfühlst? Und was bemerkst du in den letzten zwei Wochen stärker als sonst?</p>
+<p>Mit 22 Fragen erkundest du in etwa 6–8 Minuten deine Grundtendenz und deine aktuelle Tendenz. Wähle jeweils, was dir am nächsten kommt. Wenn keine Antwort passt, kannst du die Frage überspringen.</p>
+<div class="actions"><button class="primary" id="start">Test starten</button></div>
+</section>
+<form class="card" id="quiz" hidden>
+<div class="section" id="step"></div><progress id="progress" max="22" value="1" aria-label="Fortschritt"></progress>
+<p class="intro muted" id="period"></p>
+<fieldset><legend id="question" tabindex="-1"></legend><div id="answers"></div></fieldset>
+<div class="actions"><button type="button" class="secondary" id="back">Zurück</button><button class="primary" id="next">Weiter</button></div>
+</form>
+<section class="card" id="result" hidden>
+<h2 tabindex="-1" id="result-heading">Deine Ayurveda-Auswertung</h2>
+<div id="profiles"></div>
+<p>Vielleicht erkennst du in beiden Teilen dieselbe Tendenz. Vielleicht ist etwas gerade besonders präsent, das du sonst kaum bemerkst. Lass beides nebeneinander stehen. Ein einzelner Test muss dich nicht ganz beschreiben.</p>
+<div class="actions"><button class="secondary" id="edit">Antworten ansehen</button><button class="secondary" id="restart">Neu starten</button><button class="primary" id="print">Auswertung drucken</button></div>
+</section>
+<footer>Der Test ist eine persönliche Orientierung nach ayurvedischen Konzepten. Er stellt keine Diagnose. Deine Antworten bleiben auf dieser Seite.<br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3803118/">Forschung zur Einschätzung ayurvedischer Konstitution</a></footer>
+<noscript>Bitte aktiviere JavaScript, um den Test zu öffnen.</noscript>
+</main>
+<script>
+"use strict";
+const questions = [["Wenn du ausgeschlafen bist und der Tag dir gehört, wie kommt deine Energie?","In Schüben. Ich werde schnell lebendig und brauche zwischendurch Ruhe.","Ich komme gut in Fahrt, sobald ich ein klares Ziel habe.","Sie baut sich langsam auf und trägt mich dann lange."],["Wie beginnst du etwas Neues am liebsten?","Ich probiere aus und lasse mich von Ideen überraschen.","Ich setze mir ein Ziel und lege los.","Ich verschaffe mir erst einen Überblick und gehe Schritt für Schritt."],["Wie lernst du etwas, das dich interessiert?","Ich ziehe Verbindungen und springe zwischen Ideen.","Ich will das Prinzip verstehen und direkt anwenden.","Ich nehme mir Zeit und vertiefe es durch Wiederholung."],["Wie sprichst du, wenn du dich wohlfühlst?","Lebhaft, mit Bildern und vielen Assoziationen.","Klar und direkt. Ich komme gern auf den Punkt.","Ruhig und bedacht. Ich lasse Pausen stehen."],["Was passiert bei einer spontanen Planänderung?","Ich sehe schnell neue Möglichkeiten.","Ich entscheide zügig, welcher Weg jetzt sinnvoll ist.","Ich brauche einen Moment, bis ich mich umgestellt habe."],["Wie fühlt sich ein guter Arbeitstag für dich an?","Abwechslung und Platz für Einfälle.","Ein klares Vorhaben und sichtbarer Fortschritt.","Ein verlässlicher Rhythmus und Zeit, etwas zu Ende zu bringen."],["Wie gehst du meist an Entscheidungen heran?","Ich sehe mehrere Möglichkeiten und entscheide manchmal spontan.","Ich wäge kurz ab und lege mich fest.","Ich lasse mir Zeit. Wenn ich entschieden habe, bleibe ich dabei."],["Was tust du in einer Gruppe ganz von selbst?","Ich bringe neue Ideen und Blickwinkel ein.","Ich gebe Richtung, sobald es eine Entscheidung braucht.","Ich achte darauf, dass alle mitkommen und sich wohlfühlen."],["Welche Art von Bewegung zieht dich an?","Immer mal etwas anderes, je nach Lust und Tag.","Etwas, bei dem ich Fortschritte merke.","Etwas, bei dem ich in einen gleichmässigen Rhythmus komme."],["Wie meldet sich dein Appetit an einem gewöhnlichen Tag?","Unregelmässig. Ich kann eine Mahlzeit auch mal vergessen.","Deutlich. Ich merke rasch, wenn es Zeit zum Essen ist.","Eher sanft. Ich kann gut noch etwas warten."],["Wie würdest du deinen Schlaf in entspannten Zeiten beschreiben?","Eher leicht. Geräusche oder Gedanken wecken mich schnell.","Meist gut. Ein spannendes Vorhaben kann mich länger wach halten.","Eher tief. Morgens brauche ich Zeit zum Ankommen."],["Wie reagierst du im Alltag auf die Umgebungstemperatur?","Ich friere leicht, besonders an Händen oder Füssen.","Mir wird schnell warm, vor allem in warmen Räumen.","Mein Temperaturempfinden bleibt meist recht gleichmässig."],["Was bleibt dir nach einem schönen Erlebnis besonders im Gedächtnis?","Viele einzelne Eindrücke und überraschende Details.","Das, was mich besonders gepackt oder inspiriert hat.","Die Stimmung und das Gefühl, mit wem ich dort war."],["Was fällt dir auch ohne lange Vorbereitung leicht?","Aus einem kleinen Impuls mehrere Ideen entwickeln.","Erkennen, worauf es ankommt, und eine Entscheidung treffen.","Dranbleiben, bis aus einem Anfang etwas Verlässliches wird."],["Wie fühlte sich dein Alltag in den letzten zwei Wochen an?","Viele Dinge gleichzeitig. Ich bin gedanklich von einem zum nächsten gesprungen.","Ich hatte viel vor und habe mir dabei ordentlich Druck gemacht.","Vieles lief in denselben Bahnen und der Schwung fehlte."],["Was hast du nach einem vollen Tag am ehesten bemerkt?","Mein Kopf war noch lange unterwegs.","Ich war innerlich angespannt oder schneller gereizt.","Ich wollte mich zurückziehen und zu nichts mehr aufraffen."],["Wie bist du in letzter Zeit an offene Aufgaben herangegangen?","Ich habe vieles angefangen und den Faden öfter verloren.","Ich habe durchgezogen, auch wenn eine Pause gutgetan hätte.","Ich habe den Anfang öfter hinausgeschoben."],["Was fiel dir in Gesprächen zuletzt eher auf?","Ich verlor leichter den roten Faden.","Ich wurde schneller ungeduldig oder schärfer im Ton.","Ich blieb eher still, obwohl ich etwas hätte sagen wollen."],["Wie hast du in letzter Zeit freie Zeit verbracht?","Ich wechselte oft zwischen Dingen und kam selten ganz zur Ruhe.","Ich nutzte sie, um noch etwas zu erledigen.","Ich blieb häufiger bei Gewohntem, auch wenn mir Abwechslung gutgetan hätte."],["Was hat dich zuletzt bei Planänderungen am ehesten aus dem Takt gebracht?","Zu viele neue Eindrücke auf einmal.","Dass ich den Ablauf nicht mehr im Griff hatte.","Dass ich mich erst wieder aufraffen und umstellen musste."],["Was wäre für dich gerade eine spürbare Entlastung?","Weniger gleichzeitig und ein ruhiger Abend.","Ein Tag mit weniger Druck und Zeit zwischen Terminen.","Ein kleiner Tapetenwechsel, der mich wieder in Bewegung bringt."],["Was hast du in den letzten zwei Wochen an deinem Tempo bemerkt?","Es wechselte stark. Mal war ich überall, mal brauchte ich viel Ruhe.","Ich blieb oft länger auf dem Gaspedal, als es mir guttat.","Ich kam langsamer in Gang als sonst."]];
+const types = [
+ {name:"Vata",element:"Bewegung und Wandel",strength:"Du greifst neue Impulse schnell auf und verbindest Dinge, die andere erst einmal getrennt sehen. Oft kommt dir beim Ausprobieren die beste Idee.",current:"Viele Eindrücke können gerade gleichzeitig um deine Aufmerksamkeit bitten. Vielleicht läuft dein Kopf noch weiter, obwohl der Tag längst zu Ende ist.",example:"Wenn beim Arbeiten schon drei neue Ideen auftauchen, schreib sie kurz auf und bleib bei einer Sache. Die anderen dürfen auf dich warten."},
+ {name:"Pitta",element:"Klarheit und Entschlossenheit",strength:"Du erkennst oft schnell, worauf es ankommt, und bringst Dinge mit Klarheit und Feuer voran. Ein Ziel kann dir Freude und Richtung geben.",current:"Vielleicht merkst du, wie schnell aus deiner Entschlossenheit gerade Druck wird. Selbst eine freie Stunde kann sich dann wie Zeit zum Aufholen anfühlen.",example:"Wenn du merkst, dass du nur noch durchziehst, schliesse die Aufgabe an einem sinnvollen Punkt ab. Lass zwischen zwei Terminen einmal bewusst Platz."},
+ {name:"Kapha",element:"Ruhe und Beständigkeit",strength:"Du gibst Dingen Zeit, Wurzeln zu schlagen. Was dir wichtig ist, begleitest du verlässlich, auch wenn die erste Begeisterung schon vorbei ist.",current:"Vielleicht tut dir Vertrautes gerade gut und zugleich fällt es dir schwerer, etwas Neues in Bewegung zu bringen.",example:"Wenn dich etwas Neues reizt, mach den Einstieg klein. Ein Spaziergang auf einem anderen Weg kann schon reichen, um wieder Lust auf Abwechslung zu bekommen."}
+];
+const combinations = {
+ "01":"Deine Einfälle bekommen durch deine Klarheit eine Richtung. Das kann sich zeigen, wenn du beim Ausprobieren schnell merkst, welche Idee du wirklich weiterverfolgen willst.",
+ "02":"Du kannst Neues entdecken und Vertrautem Tiefe geben. Vielleicht kommen dir die besten Ideen in einem ruhigen Rahmen, in dem du etwas in deinem eigenen Tempo wachsen lassen kannst.",
+ "12":"Du kannst eine Entscheidung treffen und ihr zugleich Zeit geben. Das ist eine Stärke, wenn ein Vorhaben eine klare Richtung und über längere Zeit verlässliche Begleitung braucht."
+};
+const split = 14;
+function summarize(values, minimum) {
+ const counts = [0,0,0];
+ for (const value of values) if (Number.isInteger(value) && value >= 0 && value < 3) counts[value]++;
+ const total = counts.reduce((sum, n) => sum + n, 0);
+ const ranked = counts.map((_, i) => i).sort((a,b) => counts[b] - counts[a]);
+ const leaders = ranked.filter(i => counts[i] > 0 && counts[ranked[0]] - counts[i] <= 1);
+ return {counts,total,leaders: total < minimum ? [] : leaders};
+}
+const get = id => document.getElementById(id);
+const values = Array(questions.length).fill(null);
+let index = 0;
+function screen(id) {
+ for (const page of ["intro","quiz","result"]) get(page).hidden = page !== id;
+ window.scrollTo(0,0);
+}
+function render() {
+ const current = index >= split;
+ get("step").textContent = (current ? "Aktuelle Tendenz" : "Grundtendenz") + " · Frage " + (index + 1) + " von " + questions.length;
+ get("progress").value = index + 1;
+ get("period").textContent = current ? "Denk an deine letzten zwei Wochen." : "Denk daran, wie du dich in entspannten Zeiten über längere Zeit erlebst.";
+ const [question, ...choices] = questions[index];
+ get("question").textContent = question;
+ get("answers").replaceChildren();
+ const order = [0,1,2].map(i => (i + index) % 3);
+ for (const value of [...order,3]) {
+   const label = document.createElement("label");
+   const radio = document.createElement("input");
+   radio.type = "radio";
+   radio.name = "answer";
+   radio.value = value;
+   radio.checked = values[index] === value;
+   radio.addEventListener("change", () => {values[index] = value; get("next").disabled = false;});
+   const span = document.createElement("span");
+   span.textContent = value === 3 ? "Passt gerade nicht / überspringen" : choices[value];
+   label.append(radio,span);
+   get("answers").append(label);
+ }
+ get("back").disabled = index === 0;
+ get("next").disabled = values[index] === null;
+ get("next").textContent = index === questions.length - 1 ? "Meine Auswertung öffnen" : "Weiter";
+ screen("quiz");
+ get("question").focus();
+}
+function make(tag, text, parent) {
+ const node = document.createElement(tag);
+ node.textContent = text;
+ parent.append(node);
+ return node;
+}
+function profile(current) {
+ const {counts,total,leaders} = summarize(current ? values.slice(split) : values.slice(0,split),current ? 4 : 7);
+ const section = make("section","",get("profiles"));
+ section.className = "profile";
+ make("h3",current ? "Was gerade stärker spürbar ist" : "Was dich über längere Zeit prägt",section);
+ if (!leaders.length) {
+   make("p","Für diesen Teil hast du zu wenige passende Antworten gewählt, um eine Tendenz anzuzeigen.",section);
+   return;
+ }
+ const names = leaders.map(i => types[i].name).join(" · ");
+ make("p",leaders.length===3 ? "Deine Antworten verteilen sich auf Vata, Pitta und Kapha." : leaders.length===2 ? "Bei dir liegen "+names+" nah beieinander." : names+" ist in deinen Antworten am deutlichsten vertreten.",section);
+ for (const [i,type] of types.entries()) {
+   const row = make("div","",section);
+   row.className = "meter-row";
+   make("span",type.name,row);
+   const meter = make("meter","",row);
+   meter.max = total;
+   meter.value = counts[i];
+   meter.setAttribute("aria-label",type.name+"-Antworten");
+   make("span",counts[i]+"/"+total,row);
+ }
+ make("p","Die Balken zeigen, wie viele deiner beantworteten Fragen zu jedem Dosha beigetragen haben.",section).className = "muted";
+ for (const i of leaders) {
+   const type = types[i];
+   make("p",type.name+" steht hier für "+type.element+". "+(current ? type.current : type.strength),section);
+   if (current) make("p",type.example,section);
+ }
+ if (!current && leaders.length === 2) make("p",combinations[[...leaders].sort().join("")],section);
+}
+get("start").onclick = render;
+get("back").onclick = () => {if (index > 0) {index--; render();}};
+get("quiz").onsubmit = event => {
+ event.preventDefault();
+ if (values[index] === null) return;
+ if (index < questions.length-1) {index++; render(); return;}
+ get("profiles").replaceChildren();
+ profile(false);
+ profile(true);
+ screen("result");
+ get("result-heading").focus();
+};
+get("edit").onclick = render;
+get("restart").onclick = () => {values.fill(null); index = 0; render();};
+get("print").onclick = () => window.print();
+</script>
+</html>
